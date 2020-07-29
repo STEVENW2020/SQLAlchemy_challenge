@@ -28,9 +28,9 @@ Station = Base.classes.station
 session = Session(engine)
 
 # last date in the db
-last_date = session.query(Measurement.date).order_by(Measurement.date.desc()).first()
-yearago_date = dt.date(2017,8,23) - dt.timedelta(days=365)
-
+last_datestr = session.query(Measurement.date).order_by(Measurement.date.desc()).first()
+latest_date = dt.datetime.strptime(last_datestr[0],'%Y-%m-%d')
+yearago_date = dt.date(latest_date.year-1,latest_date.month, latest_date.day)
 session.close()
 
 
@@ -48,7 +48,7 @@ app = Flask(__name__)
 def welcome():
     """List all available api routes."""
     return (
-        f"Welcome to the Hawaii Climate Page<br/> "
+        f"Hawaii Climate Page<br/> "
         f"These are the available routes:<br/>"
         f"<br/>"  
         f"The list of precipitation data with dates:<br/>"
